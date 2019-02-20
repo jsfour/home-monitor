@@ -5,10 +5,23 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"time"
 )
 
+const PublicIpEndpoint = "https://api.ipify.org"
 const PushEndpoint = "https://push.statuscake.com/"
+
+func getPublicIp() (string, error) {
+	res, err := http.Get(PublicIpEndpoint)
+	if err != nil {
+		return "", err
+	}
+
+	buf := new(bytes.Buffer)
+	buf.ReadFrom(res.Body)
+	s := buf.String()
+
+	return s, nil
+}
 
 func sendStatus() error {
 
